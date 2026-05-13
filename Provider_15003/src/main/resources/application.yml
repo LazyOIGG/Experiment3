@@ -1,0 +1,16 @@
+server:
+  port: 15003
+
+spring:
+  application:
+    name: "provider-service"
+
+eureka:
+  instance:
+    prefer-ip-address: true #使用IP
+    instance-id: "${spring.cloud.client.ip-address}:${server.port}" #实例唯一标识
+    lease-renewal-interval-in-seconds: 5 #Eureka客户端向服务端发送心跳的时间间隔，默认30秒
+    lease-expiration-duration-in-seconds: 15 #Eureka服务端剔除超时客户端的容忍时间，默认90秒
+  client:
+    service-url: #服务注册中心服务地址
+      defaultZone: "http://eurekaService19000:19000/eureka/, http://eurekaService19001:19001/eureka/, http://eurekaService19002:19002/eureka/"

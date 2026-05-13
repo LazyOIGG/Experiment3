@@ -1,0 +1,69 @@
+server:
+  port: 11001
+
+spring:
+  application:
+    name: "consumer-service"
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: "${spring.cloud.client.ip-address}:${server.port}"
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 15
+  client:
+    service-url:
+      defaultZone: "http://eurekaService19000:19000/eureka/, http://eurekaService19001:19001/eureka/, http://eurekaService19002:19002/eureka/"
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-type: TIME_BASED
+        sliding-window-size: 10000
+        failure-rate-threshold: 10
+        wait-duration-in-open-state: 5000
+        permitted-number-of-calls-in-half-open-state: 2
+        event-consumer-buffer-size: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        record-exceptions:
+          - java.lang.Exception
+        register-health-indicator: false
+    instances:
+      breakerA:
+        base-config: default
+        failure-rate-threshold: 30
+        sliding-window-size: 10000
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+      breakerB:
+        base-config: default
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 30
+        slow-call-duration-threshold: 2000
+        sliding-window-size: 10000
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state: 5000
+        permitted-number-of-calls-in-half-open-state: 3
+
+  bulkhead:
+    configs:
+      default:
+        max-concurrent-calls: 10
+        max-wait-duration: 20ms
+        writable-stack-trace-enabled: true
+    instances:
+      bulkheadA:
+        base-config: default
+
+  ratelimiter:
+    configs:
+      default:
+        limit-refresh-period: 2s
+        limit-for-period: 5
+        timeout-duration: 0ms
+        subscribe-for-events: true
+        register-health-indicator: false
+    instances:
+      rateLimiterA:
+        base-config: default

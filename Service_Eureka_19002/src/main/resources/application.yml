@@ -1,0 +1,18 @@
+server:
+  port: 19002
+
+spring:
+  application:
+    name: "eureka-19002"
+
+#服务注册中心相关配置
+eureka:
+  instance: #创建实例
+    hostname: "eurekaService19002" #域名
+  server:
+    enable-self-preservation: false #关闭自我保护机制，避免注册中心不在删除超时的微服务，本机微服务数量少
+  client:
+    register-with-eureka: false #是否将自己注册到eureka服务当中
+    fetch-registry: true #是否启用从注册中心拉取服务列表
+    service-url: #服务注册中心服务地址
+      defaultZone: "http://eurekaService19000:19000/eureka/, http://eurekaService19001:19001/eureka/, http://eurekaService19002:19002/eureka/"
