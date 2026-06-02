@@ -6,7 +6,7 @@
 
 | 组件                          | 版本                            |
 |-----------------------------|-------------------------------|
-| Java                        | 17                             |
+| Java                        | 17                            |
 | Spring Boot                 | 4.0.3                         |
 | Spring Cloud                | 2025.1.1                      |
 | Spring Cloud Netflix Eureka | —                             |
